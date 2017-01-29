@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>      
+       		  
+        <record model="ir.ui.view" id="instance_template_action_type_form">
+            <field name="name">instance_template_action_type_form</field>
+            <field name="model">instance.template.action.type</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+					<header>
+						<button name="test" string="Test" type="object" class="oe_highlight" />	
+					</header>
+            		            		
+            		<group col="4">
+			            <field name="name" />
+			            <separator string="Script" colspan="4"/> 		             
+           		        <field name="script"  nolabel="1" colspan="4"/>
+           		        <separator string="Test" colspan="4"/> 	
+           		        <field name="test_connexion" />	             
+           		        <field name="test_script"  nolabel="1" colspan="4"/>
+						<field name="return_state" />
+						<separator string="Log" colspan="4"/>
+						<field name="return_log" nolabel="1" colspan="4"/>
+            		</group>
+            	</form>
+            </field> 
+        </record>     
+        
+        <record model="ir.actions.act_window" id="action_action_type">
+			<field name="name">Action type</field>
+			<field name="res_model">instance.template.action.type</field>
+			<field name="view_type">form</field>
+		</record>   
+        
+        <record model="ir.ui.view" id="instance_template_form">
+            <field name="name">instance_template_form</field>
+            <field name="model">instance.template</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+            		<group col="4">
+			            <field name="name" />
+			            <separator string="actions" colspan="4"/> 		             
+           		        <field name="action_ids"  nolabel="1" colspan="4"/>     			            			
+            		</group>
+            	</form>
+            </field> 
+        </record>
+                
+		<record model="ir.actions.act_window" id="action_instance_template">
+			<field name="name">Template</field>
+			<field name="res_model">instance.template</field>
+			<field name="view_type">form</field>
+		</record>
+   
+		<record model="ir.ui.view" id="instance_template_action_return_map_form">
+            <field name="name">instance_template_action_return_map_form</field>
+            <field name="model">instance.template.action.return.map</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+            		<group col="4">
+			            <field name="state" />
+           		        <field name="color"  widget="color"/>     			            			
+            		</group>
+            	</form>
+            </field> 
+        </record>
+
+		<record model="ir.ui.view" id="instance_template_action_return_map_tree">
+            <field name="name">instance_template_action_return_map_tree</field>
+            <field name="model">instance.template.action.return.map</field>   
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            	<tree editable="bottom">
+		            <field name="state" />
+       		        <field name="color"  widget="color"/>     			            			
+            	</tree>
+            </field> 
+        </record>
+                				
+        <record model="ir.ui.view" id="instance_template_action_form">
+            <field name="name">instance_template_action_form</field>
+            <field name="model">instance.template.action</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+            		<group col="4">
+			            <field name="name" />
+			            <field name="type_id" />	
+			            <field name="return_state" />	            
+			            <separator string="Script" colspan="4"/> 		             
+           		        <field name="script"  nolabel="1" colspan="4"/>     			            			
+			            <separator string="Return mapping" colspan="4"/> 		             
+           		        <field name="return_map_ids"  nolabel="1" colspan="4"/>     			            			
+	        		</group>
+            	</form>
+            </field> 
+        </record>	
+
+		<record model="ir.actions.act_window" id="action_instance_template_action">
+			<field name="name">Template action</field>
+			<field name="res_model">instance.template.action</field>
+			<field name="view_type">form</field>
+		</record>                	            
+		     
+	</data>
+</openerp>

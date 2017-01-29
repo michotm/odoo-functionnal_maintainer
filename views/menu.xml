@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>    
+        <menuitem name="Instance" id="menu_instance_maintainer" />
+		
+        <menuitem name="Instances" id="instance_maintainer_instances" parent="menu_instance_maintainer" sequence="0"/>
+		<menuitem name="Instances" parent="instance_maintainer_instances" id="instance_maintainer_instance" action="action_instance"/>
+
+        <menuitem name="Configuration" id="instance_maintainer_configuration" parent="menu_instance_maintainer" sequence="10"/>
+		<menuitem name="Identity" parent="instance_maintainer_configuration" id="identity" action="action_identity"/>
+		<menuitem name="Connexion" parent="instance_maintainer_configuration" id="connexion" action="action_connexion"/>
+		<menuitem name="Action type" parent="instance_maintainer_configuration" id="action_type" action="action_action_type"/>
+		<menuitem name="Template action" parent="instance_maintainer_configuration" id="instance_template_action" action="action_instance_template_action"/>
+		<menuitem name="Template" parent="instance_maintainer_configuration" id="instance_template" action="action_instance_template"/>
+	</data>
+</openerp>

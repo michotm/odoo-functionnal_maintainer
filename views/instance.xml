@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>      
+
+        <record model="ir.ui.view" id="instances_form">
+            <field name="name">instances_form</field>
+            <field name="model">instance</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+					<header>
+						<button name="sync" string="Sync" type="object" class="oe_highlight" />	
+					</header>
+            		<group col="4">
+			            <field name="name" />
+			            <field name="template_id" />
+						<notebook colspan="4">
+                			<page string="Actions">			            	
+	           		        	<field name="action_ids"  nolabel="1" colspan="4"/>     			            			
+	           		        </page>
+                			<page string="Connexions">			            	
+	           		        	<field name="connexion_ids"  nolabel="1" colspan="4"/>     			            			
+	           		        </page>	           		        	           		        
+	           		    </notebook>
+            		</group>
+            	</form>
+            </field> 
+        </record>	
+        
+		<record model="ir.actions.act_window" id="action_instance">
+			<field name="name">Instance</field>
+			<field name="res_model">instance</field>
+			<field name="view_type">form</field>
+		</record>        
+        
+        <record model="ir.ui.view" id="instances_action_item_form">
+            <field name="name">instances_action_item_form</field>
+            <field name="model">instance.action.item</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+					<header>
+						<button name="execute" string="Execute" type="object" class="oe_highlight" />	
+					</header>
+            		            		
+            		<group col="4">
+			            <field name="name" />
+			            <newline/>
+			            <field name="action_template_id" />
+			            <field name="connexion_id" />
+						<field name="ir_cron_id" />		            
+			            <newline/>
+			            <field name="return_state" widget="color"/>
+			            <newline/>
+			            <field name="return_log" colspan="4" />			            							
+            		</group>
+            	</form>
+            </field> 
+        </record>	
+                
+        <record model="ir.ui.view" id="instances_action_item_tree">
+            <field name="name">instances_action_item_tree</field>
+            <field name="model">instance.action.item</field>   
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            	<tree>
+		            <field name="name" />
+		            <field name="action_template_id" />
+		            <field name="connexion_id" />
+					<field name="ir_cron_id" />		            
+		            <field name="return_state"  widget="color"/>
+					<button class="oe_inline oe_stat_button" type="object" string="Execute" icon="gtk-go-forward" name="execute"  />		            			            
+            	</tree>
+            </field> 
+        </record>	        
+
+        <record model="ir.ui.view" id="instances_connexion_item_form">
+            <field name="name">instances_connexion_item_form</field>
+            <field name="model">instance.connexion.item</field>   
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<form>
+            		<group col="4">
+			            <field name="action_type_id" />
+			            <field name="connexion_id" />
+			            <field name="default" />			            				            
+            		</group>
+            	</form>
+            </field> 
+        </record>	
+                
+        <record model="ir.ui.view" id="instances_connexion_item_tree">
+            <field name="name">instances_connexion_item_tree</field>
+            <field name="model">instance.connexion.item</field>   
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+            	<tree>
+		            <field name="action_type_id" />
+		            <field name="connexion_id" />
+			        <field name="default" />			            				            		            			            
+            	</tree>
+            </field> 
+        </record>	 
+                                
+
+		        
+		     
+	</data>
+</openerp>
