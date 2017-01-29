@@ -1,1 +1,1 @@
-Nagios like to check functional aspect of customer instance
+# odoo-functionnal_maintainer
