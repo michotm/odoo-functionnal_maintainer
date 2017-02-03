@@ -35,10 +35,29 @@ class instance(models.Model):
     template_id = fields.Many2one('instance.template', required=True) 
     connexion_ids = fields.One2many('instance.connexion.item','instance_id',string='Connexion')
     action_ids = fields.One2many('instance.action.item','instance_id',string='Actions')
+    
 
+    #in : action_ids : list of id of template_action
+    def add_actions(self, action_ids):        
+        print "add actions %s" % (action_ids)
+        for action in self.env['instance.template.action'].browse(action_ids):
+            print "try to add action"
+            if len(self.action_ids.filtered(lambda r: r.action_template_id.id == action.id)) == 0:  
+                print "add action %s" % (action.id)                 
+                self.action_ids.create( {'name': action.name,
+                                         'action_template_id': action.id,
+                                         'instance_id': self.id,
+                                         'connexion_id': self.connexion_ids.filtered(lambda r: r.action_type_id.id == action.type_id.id).connexion_id.id,
+                                        })
+
+    #in : action_ids : list of id of template_action
+    def delete_actions(self,action_ids):
+        print "delete_action %s" % (action_ids)
+        if len(action_ids):
+            self.action_ids.filtered(lambda r: r.action_template_id.id in action_ids).unlink()
+                
     @api.multi
     def sync(self):
-        action_to_add = []
         for action in self.template_id.action_ids:
             if len(self.action_ids.filtered(lambda r: r.action_template_id.id == action.id)) == 0:                   
                 self.action_ids.create( {'name': action.name,
@@ -46,6 +65,12 @@ class instance(models.Model):
                                          'instance_id': self.id,
                                          'connexion_id': self.connexion_ids.filtered(lambda r: r.action_type_id.id == action.type_id.id).connexion_id.id,
                                         })
+    
+    def sync_all(self,template_id, deleted_actions_ids, added_actions_ids):
+        print "sync_all"
+        for instance in self.search([('template_id', '=', template_id)]):
+            instance.add_actions(added_actions_ids)
+            instance.delete_actions(deleted_actions_ids)
 
 class instance_connexion_item(models.Model):
     _name = "instance.connexion.item"
@@ -73,7 +98,7 @@ class instance_action_item(models.Model):
         return_dict = self.action_template_id.type_id.execute(self.action_template_id,self.connexion_id)
         print "*************************"
         if 'return_state' in return_dict:
-            print "return_state in dict"
+            print "return_state in dict state:%s" % (str(return_dict['return_state']))
             return_map = self.action_template_id.return_map_ids.filtered(lambda r: r.state == str(return_dict['return_state']))
             print return_map
             if len(return_map):

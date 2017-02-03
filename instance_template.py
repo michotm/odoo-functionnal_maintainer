@@ -102,13 +102,16 @@ class instance_template(models.Model):
     name = fields.Char('Name', required=True)
     action_ids = fields.Many2many('instance.template.action','instance_template_action_rel','template_id','action_id', string='Actions')
     
-    def write(self,ids,vals):
-        print "------------"
-        print vals
-        print "------------"
+    @api.multi
+    def write(self, vals):
+        if "action_ids" in vals:
+            if len(vals["action_ids"]):
+                deleted_actions_ids = list(set(self.action_ids.ids) - set(vals["action_ids"][0][2]))
+                added_actions_ids = list(set(vals["action_ids"][0][2]) - set(self.action_ids.ids))
+                self.env['instance'].sync_all(self.id, deleted_actions_ids, added_actions_ids)
         
-        for instance in self:
-            res = super(instance_template,instance).write(vals)
+        return super(instance_template,self).write(vals)
+        
 
 
     
