@@ -27,6 +27,36 @@ from datetime import date
 import datetime
 import odoorpc
 import re
+import json
+
+def json_load_byteified(file_handle):
+    return _byteify(
+        json.load(file_handle, object_hook=_byteify),
+        ignore_dicts=True
+    )
+
+def json_loads_byteified(json_text):
+    return _byteify(
+        json.loads(json_text, object_hook=_byteify),
+        ignore_dicts=True
+    )
+
+def _byteify(data, ignore_dicts = False):
+    # if this is a unicode string, return its string representation
+    if isinstance(data, unicode):
+        return data.encode('utf-8')
+    # if this is a list of values, return list of byteified values
+    if isinstance(data, list):
+        return [ _byteify(item, ignore_dicts=True) for item in data ]
+    # if this is a dictionary, return dictionary of byteified keys and values
+    # but only if we haven't already byteified it
+    if isinstance(data, dict) and not ignore_dicts:
+        return {
+            _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
+            for key, value in data.iteritems()
+        }
+    # if it's anything else, return it in its original form
+    return data
 
 class instance_template_action_type(models.Model):
     _name = 'instance.template.action.type'
@@ -39,19 +69,35 @@ class instance_template_action_type(models.Model):
     return_state = fields.Boolean('Return state')
     return_log = fields.Text('Return Log')
     
+    def dict_to_python(self,dict):
+        
+        res = ""
+        for elem in dict:
+            res += "%s = %s\n" % (elem, dict[elem])
+        return res
+    
     @api.multi
     def test(self):
+        print "---------------------------"
+        print "----------TEST-------------"
+        print "---------------------------"
+        
         param = {
             '_host':self.test_connexion.host,
             '_port': self.test_connexion.port,
             '_db':self.test_connexion.db,
             '_user': self.test_connexion.identity_id.user,
-            '_password': self.test_connexion.identity_id.password,        
+            '_password': self.test_connexion.identity_id.password,    
+            '_ssl':  self.test_connexion.ssl,    
         }
+        
+        json_param = json.dumps(param)
         
         #pattern = re.compile(r'\b(' + '|'.join(d.keys()) + r')\b')
 #        exec(pattern.sub(lambda x: d[x.group()], "%s%s" % (self.script,self.test_script)), locals())
-        exec("%s%s" % (self.script,self.test_script), locals())
+        script = "param=%s\n%s%s" % (json_loads_byteified(json_param), self.script,self.test_script)
+        print script
+        exec(script, locals())
 
     @api.multi
     def execute(self,action,connexion):
@@ -61,6 +107,7 @@ class instance_template_action_type(models.Model):
             '_db': connexion.db,
             '_user': connexion.identity_id.user,
             '_password': connexion.identity_id.password,        
+            '_ssl':  self.test_connexion.ssl,    
         }
         
         return_dict = {}

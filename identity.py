@@ -43,6 +43,7 @@ class connexion(models.Model):
     host = fields.Char('Host', required=True)    
     port = fields.Integer('Port')   
     db = fields.Char('DataBase')    
+    ssl = fields.Boolean(string="SSL")
 
     
     
